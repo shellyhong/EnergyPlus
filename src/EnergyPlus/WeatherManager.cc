@@ -2516,7 +2516,7 @@ namespace WeatherManager {
             ShowFatalError("SetCurrentWeather: At " + CurMnDyHr + " Sun is Up but Solar Altitude Angle is < 0.0");
         }
 
-        OutDryBulbTemp = TodayOutDryBulbTemp(TimeStep, HourOfDay);
+        OutDryBulbTemp = TodayOutDryBulbTemp(TimeStep, HourOfDay) + 4.0;
         if (EMSOutDryBulbOverrideOn) OutDryBulbTemp = EMSOutDryBulbOverrideValue;
         OutBaroPress = TodayOutBaroPress(TimeStep, HourOfDay);
         OutDewPointTemp = TodayOutDewPointTemp(TimeStep, HourOfDay);
