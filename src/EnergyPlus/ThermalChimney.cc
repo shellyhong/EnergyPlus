@@ -198,6 +198,7 @@ namespace ThermalChimney {
         using General::RoundSigDigits;
         using ScheduleManager::GetScheduleIndex;
         using namespace DataIPShortCuts;
+        using DataEnvironment::OutDryBulbTempAt;              // add the outdrybulb  by hsy
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         Real64 const FlowFractionTolerance(0.0001); // Smallest deviation from unity for the sum of all fractions
@@ -704,7 +705,7 @@ namespace ThermalChimney {
                 }
 
                 EquaCoef(1, 1) = Process2;
-                EquaConst(1) = Process3 - Process1 * RoomAirTemp;
+                EquaConst(1) = Process3 - Process1 * Zone(NTC).OutDryBulbTemp;    //change RoomAirTemp here by hsy
                 for (ThermChimLoop1 = 2; ThermChimLoop1 <= NTC; ++ThermChimLoop1) {
                     EquaCoef((ThermChimLoop1 - 1), ThermChimLoop1) = Process1;
                     EquaCoef(ThermChimLoop1, ThermChimLoop1) = Process2;
@@ -714,11 +715,11 @@ namespace ThermalChimney {
                 GaussElimination(EquaCoef, EquaConst, ThermChimSubTemp, NTC);
 
                 AirRelativeCrossArea = AirOutletCrossAreaTC / AirInletCrossArea;
-                if (ThermChimSubTemp(NTC) <= RoomAirTemp) {
+                if (ThermChimSubTemp(NTC) <= Zone(NTC).OutDryBulbTemp) {            //change RoomAirTemp here by hsy
                     TempTCVolumeAirFlowRate(IterationLoop) = 0.0;
                 } else {
                     TempTCVolumeAirFlowRate(IterationLoop) = DischargeCoeffTC * AirOutletCrossAreaTC *
-                                                             std::sqrt(2.0 * ((ThermChimSubTemp(NTC) - RoomAirTemp) / RoomAirTemp) * 9.8 *
+                                                             std::sqrt(2.0 * ((ThermChimSubTemp(NTC) - Zone(NTC).OutDryBulbTemp) / Zone(NTC).OutDryBulbTemp) * 9.8 *    //change RoomAirTemp here by hsy
                                                                        OverallThermalChimLength / pow_2(1.0 + AirRelativeCrossArea));
                 }
 
@@ -739,7 +740,7 @@ namespace ThermalChimney {
             }
 
             EquaCoef(1, 1) = Process2;
-            EquaConst(1) = Process3 - Process1 * RoomAirTemp;
+            EquaConst(1) = Process3 - Process1 * Zone(NTC).OutDryBulbTemp;  //change RoomAirTemp here by hsy
             for (ThermChimLoop1 = 2; ThermChimLoop1 <= NTC; ++ThermChimLoop1) {
                 EquaCoef((ThermChimLoop1 - 1), ThermChimLoop1) = Process1;
                 EquaCoef(ThermChimLoop1, ThermChimLoop1) = Process2;
@@ -749,11 +750,11 @@ namespace ThermalChimney {
             GaussElimination(EquaCoef, EquaConst, ThermChimSubTemp, NTC);
 
             AirRelativeCrossArea = AirOutletCrossAreaTC / AirInletCrossArea;
-            if (ThermChimSubTemp(NTC) <= RoomAirTemp) {
+            if (ThermChimSubTemp(NTC) <= Zone(NTC).OutDryBulbTemp) {          //change RoomAirTemp here by hsy
                 TCVolumeAirFlowRate = 0.0;
             } else {
                 TCVolumeAirFlowRate = DischargeCoeffTC * AirOutletCrossAreaTC *
-                                      std::sqrt(2.0 * ((ThermChimSubTemp(NTC) - RoomAirTemp) / RoomAirTemp) * 9.8 * OverallThermalChimLength /
+                                      std::sqrt(2.0 * ((ThermChimSubTemp(NTC) - Zone(NTC).OutDryBulbTemp) / Zone(NTC).OutDryBulbTemp) * 9.8 * OverallThermalChimLength /   //change RoomAirTemp here by hsy
                                                 pow_2(1.0 + AirRelativeCrossArea));
             }
 
